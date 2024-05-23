@@ -24,7 +24,7 @@ app.get('/enviar_TPAH', (req, res) => {
         const valores = `${currentTime},${valor1},${valor2},${valor3},${valor4},${valor5},${valor6}\n`;
 
         // Agregar los valores al final del archivo (puedes cambiar el nombre del archivo según tus necesidades)
-        fs.appendFile('regPTH-MQ2-6-135.csv', valores, 'utf8', (err) => {
+        fs.appendFile('regPTH.csv', valores, 'utf8', (err) => {
             if (err) {
                 console.error(err);
                 res.status(500).json({ error: 'Error al escribir en el archivo.' });
