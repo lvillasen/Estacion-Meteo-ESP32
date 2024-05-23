@@ -15,7 +15,7 @@ El sensor que usamos para medir presión, temperatura y humedad es el BME280. Pa
 
 ## Demo en línea
 
-https://ciiec.buap.mx/Estacion'Meteo/
+https://ciiec.buap.mx/Estacion-Meteo/
 
 ## Licencia
 
