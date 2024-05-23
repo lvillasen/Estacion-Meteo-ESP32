@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <title>MeteoStation</title>
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+<script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
+
+<link rel="stylesheet" href="./PTH.css">
+
+</head>
+<body>
+  <div class="block_container"  style="background-color: #00b5e2; margin-left:10%; margin-right:10%;">    <p> </p>
+    <p> </p>
+    <br>
+
+
+
+    
+    <p> </p>
+    <p> </p>
+
+        <h1> Construye una Estación Meteorológica</h1>
+        <h2> CIIEC-BUAP</h2>
+   <p style="font-size: 30px; margin-left: 80%;">May 19th, 2024 </p>
+        <p style="font-size: 20px; margin-left: 80%;"><a href="https://github.com/lvillasen/Estacion-Meteo" >Source Code</a> </p>
+
+        <hr>
+          
+             
+        <h2> Introducción</h2>
+
+<p style="color:black;font-size:30px;">
+Se muestra en detalle cómo construir una estación meterorológica para medir presión atmosférica, humedad ambiental, temperatura ambiental y concentraciones de algunos gases (PTHG). El sistema usa un <a href="https://en.wikipedia.org/wiki/ESP32" >microcontrolador ESP32</a> que se programa mediante el software gratuito <a href="https://www.javatpoint.com/arduino-ide" >Arduino IDE</a> con el código que se muestra <a href="https://ciiec.buap.mx/Estacion-Meteo/estacion-meteo.ino" >aquí</a>. Los valores de PTHG se miden cada 5 segundos y se mandan por WiFi a un servidor en el que se almacenan. El servidor recibe estos datos usando un código que se corre con node.js y que se muestra <a href="https://ciiec.buap.mx/Estacion-Meteo/PTH-MQ2-6-135.js" >aquí</a>. También se incluye el código en HTML y JavaScript para desplegar gráficas con estos datos entre dos fechas dadas usando cualquier navegador web.</p>
+ <br> <br>
+
+ <p style="color:black;font-size:30px;"> El sensor que usamos  para medir presión, temperatura y humedad es el BME280. Para medir condentración de algunos gases usamos los sensores MQ2 (gas licuado de petroleo, LP, y gas natural vehicular, GNV), MQ6 (propano, butano y metano) y MQ135 (amoniaco, alcohol, benceno, humo y dióxido de carbono). Los valores que se muestran de los sensores de gases no están calibrados. Se pueden fácilmente agregar otros sensores para crecer la capacidad de esta estación con modificaciones ligeras del software.
+
+
+
+     <center><img src="./meteo.png" alt="Trulli" width="50%"></center>
+    <br>
+<hr>
+
+<button class="new_styled"  id="toggleInstruc" aria-pressed="false">Instrucciones</button>
+
+ <pre id="instruc" style="background-color: lightblue; margin-left:5%; margin-right:5%;">
+
+
+    El sensor de presión atmosférica, temperatura y humedad 
+    ambiental BME280 se conecta al microcontrolador via SPI, 
+    conectando el pin SCL del BME280 al pin 22 del ESP32, el SCL
+    al pin 21 del ESP32, el pin Vin a 5V y el pin de tierra del BME280 al 
+    pin de tierra del ESP32.
+
+    Los sensores de gases se conectan a tierra, 5V y los pines de señales 
+    del modo siguiente: el pin de señal del MQ2 al pin 33 del ESP32, 
+    el pin de señal del MQ6 al pin 32 del ESP32 y el pin de señal del 
+    MQ135 al pin 35 del ESP32.
+
+    Poner el nombre de la red de interned en la variable ssid y la clave 
+    en password en el  código con nombre estacíon-meteo.ino.  Poner el 
+    nombre del servidor web en la variable serverName de este mismo código.
+
+    Copiar los archivos PTH.js, index.html, PTH.css, PTH-MQ2-6-135.js al 
+    directorio Estacion-Meteo del servidor web. 
+
+    En el servidor web instalar Node.js y el framework web Express. 
+    Conectar la estación meteorológica a la alimentación y teclear 
+
+    nohup node PTH-MQ2-6-135.js &
+
+    este código recibe los datos y los guarda en el archivo
+
+    regPTH.csv del directorio Estacion-Meteo
+
+    Usar cualquier navegador web para abrir la 
+    página web https://nombre-del-servidor/PTH
+
+
+</pre>
+<hr>
+
+
+<div id="center" style="background-color: #00b5e2; width:100%;">
+
+
+<label for="start">Start Date:</label>
+
+<input type="date" id="start_date"  value="2024-01-10" min="2023-10-01"  onchange="start_date()"/>
+
+<br>
+<label for="Final Date">Final Date:</label>
+
+<input type="date" id="final_date"   value="2024-01-11" min="2023-10-01"  onchange="final_date()"/> 
+
+<br>
+
+    <label>Plotting Interval </label>
+        <select id="interval" onchange="getData()">
+
+                <option value="1">Every: 5 s</option>
+                <option value="2">Every: 10 s</option>
+                <option value="6">Every: 30 s</option>
+                <option value="12" selected>Every: 1 m</option>
+                <option value="24">Every: 2 m</option>
+                <option value="60">Every: 5 m</option>
+
+                </select>
+    </div>
+    <hr>
+        <h1> Pressure</h1>
+
+
+    <div class="block_container" style="background-color: #00b5e2; width:100%;">
+        <div id="plot1" style="width:100%;"></div>
+    </div>
+   <br>
+     <hr>
+
+        <h1> Temperature</h1>
+
+    <div class="block_container" style="background-color: #00b5e2; width:100%;">
+        <div id="plot2" style="width:100%;"></div>
+    </div>
+   <br>
+ <hr>
+
+        <h1> Humidity</h1>
+
+    <div class="block_container" style="background-color: #00b5e2; width:100%;">
+        <div id="plot3" style="width:100%;"></div>
+    </div>
+       <br>
+        <hr>
+
+         <h1> Gas Sensors MQ2, MQ6 and MQ135</h1>
+
+    <div class="block_container" style="background-color: #00b5e2; width:100%;">
+        <div id="plot4" style="width:100%;"></div>
+    </div>
+       <br>
+        <hr>
+
+
+
+
+
+
+</body>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="./PTH.js"></script>
+</html>

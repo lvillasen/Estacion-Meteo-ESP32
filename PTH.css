@@ -1,0 +1,90 @@
+body {
+    background-color: #00b5e2;
+}
+
+
+
+
+       
+
+block_container {
+
+    text-align: center;
+
+}
+
+h1 {
+    font-size: 40pt;
+    font-family: arial;
+    color: black;
+    text-align: center;
+}
+
+h2 {
+    font-size: 30pt;
+    font-family: arial;
+    color: black;
+    text-align: center;
+}
+
+.styled {
+border: 0;
+line-height: 2.5;
+padding: 0 20px;
+font-size: 1rem;
+text-align: center;
+color: #fff;
+text-shadow: 1px 1px 1px #000;
+border-radius: 10px;
+background-color: rgba(220, 0, 0, 1);
+background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6), inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.styled:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.styled:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.new_styled {
+border: 0;
+line-height: 1.5;
+padding: 0 20px;
+font-size: 1rem;
+text-align: center;
+color: 'black';
+border-radius: 10px;
+background-color: 'rgba(220, 1, 1, 1)';
+background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6), inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
+input[type="text"]{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+    }
+
+.selection {
+  font-size : 18px;
+}
+.mark-special-selected,
+.selection{
+  background : rgba(173, 216, 130, 0.9);
+  border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+  outline: 2px;
+}
+
+
+#check1,
+#check2,
+#check3,
+#logscale {
+    width: 20px;
+    height: 20px;
+}
