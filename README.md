@@ -10,7 +10,7 @@ El sensor que usamos para medir presión, temperatura y humedad es el BME280. Pa
 
 ## Uso
 
-- Seguir las instecciones que se incluyen en la página wed de demo
+- Seguir las instrucciones que se incluyen en la página wed de demo
 
 
 ## Demo en línea
